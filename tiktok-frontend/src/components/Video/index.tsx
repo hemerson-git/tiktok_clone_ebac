@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import "./styles.css";
+import { VideoFooter } from "../VideoFooter";
 
 export function Video() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -24,8 +25,12 @@ export function Video() {
         className="video__player"
         ref={videoRef}
         loop
+        autoPlay
+        disablePictureInPicture
         onClick={handleTogglePlay}
-      ></video>
+      />
+
+      <VideoFooter />
     </div>
   );
 }
