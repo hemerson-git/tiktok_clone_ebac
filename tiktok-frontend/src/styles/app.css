@@ -1,0 +1,30 @@
+.app {
+  background-color: black;
+  height: 100vh;
+  color: white;
+  display: grid;
+  place-items: center;
+}
+
+.app__videos {
+  background: red;
+  height: 100vh;
+  max-height: 800px;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  overflow: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.app__videos::-webkit-scrollbar {
+  display: none;
+}
+
+.app__videos {
+  -ms-overflow-style: none;
+}
