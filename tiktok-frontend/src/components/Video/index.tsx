@@ -1,8 +1,37 @@
 import { useRef, useState } from "react";
 import "./styles.css";
 import { VideoFooter } from "../VideoFooter";
+import { VideoSideBar } from "../VideoSideBar";
 
-export function Video() {
+type Props = {
+  id: number;
+  author: AuthorProps;
+  song: SongProps;
+  likes: number;
+  comments: number;
+  shares: number;
+  url: string;
+};
+
+export type AuthorProps = {
+  userName: string;
+  name: string;
+};
+
+export type SongProps = {
+  name: string;
+  author: string;
+};
+
+export function Video({
+  id,
+  comments,
+  likes,
+  shares,
+  author,
+  song,
+  url,
+}: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -21,7 +50,7 @@ export function Video() {
   return (
     <div className="video">
       <video
-        src="https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4"
+        src={url}
         className="video__player"
         ref={videoRef}
         loop
@@ -30,7 +59,8 @@ export function Video() {
         onClick={handleTogglePlay}
       />
 
-      <VideoFooter />
+      <VideoFooter author={author} song={song} />
+      <VideoSideBar comments={comments} likes={likes} shareTimes={shares} />
     </div>
   );
 }

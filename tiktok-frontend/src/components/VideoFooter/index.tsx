@@ -1,17 +1,29 @@
+import { AuthorProps, SongProps } from "../Video";
 import "./styles.css";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 
-export function VideoFooter() {
+type Props = {
+  song?: SongProps;
+  author: AuthorProps;
+};
+
+export function VideoFooter({ author, song }: Props) {
   return (
     <footer className="videoFooter">
       <div>
-        <p className="videoFooter__author">@hemerson-dev</p>
+        <p className="videoFooter__author">
+          @{author.userName} - {author.name}
+        </p>
         <p className="videoFooter__description">Video Description</p>
 
         <div className="videoFooter__song">
           <MusicNoteIcon />
           <div className="videoFooter__title">
-            <p>Song title</p>
+            <p>
+              {`${song ? song.name : "Original audio"} ${
+                song ? " - " + song?.author : ""
+              }`}
+            </p>
           </div>
         </div>
       </div>

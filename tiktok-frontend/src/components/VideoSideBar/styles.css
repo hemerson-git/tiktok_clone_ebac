@@ -1,0 +1,19 @@
+.videoSideBar {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  right: 20px;
+}
+
+.videoSideBar button {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  align-items: center;
+  gap: 4px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
