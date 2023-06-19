@@ -1,12 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles.css";
 import { VideoFooter } from "../VideoFooter";
 import { VideoSideBar } from "../VideoSideBar";
+import { DocumentReference, getDoc } from "firebase/firestore/lite";
 
 type Props = {
   id: number;
-  author: AuthorProps;
-  song: SongProps;
+  author: DocumentReference<unknown>;
+  song: DocumentReference<unknown>;
   likes: number;
   comments: number;
   shares: number;
@@ -23,17 +24,16 @@ export type SongProps = {
   author: string;
 };
 
-export function Video({
-  id,
-  comments,
-  likes,
-  shares,
-  author,
-  song,
-  url,
-}: Props) {
+export function Video({ comments, likes, shares, author, song, url }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [dbAuthor, setDbAuthor] = useState<AuthorProps | null>(null);
+  const [dbSong, setDbSong] = useState<SongProps | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    getDoc(author).then((doc) => setDbAuthor(doc.data() as AuthorProps));
+    getDoc(song).then((doc) => setDbSong(doc.data() as SongProps));
+  }, [author, song]);
 
   function handleTogglePlay() {
     setIsPlaying((prevState) => !prevState);
@@ -59,7 +59,7 @@ export function Video({
         onClick={handleTogglePlay}
       />
 
-      <VideoFooter author={author} song={song} />
+      {dbAuthor && dbSong && <VideoFooter author={dbAuthor} song={dbSong} />}
       <VideoSideBar comments={comments} likes={likes} shareTimes={shares} />
     </div>
   );

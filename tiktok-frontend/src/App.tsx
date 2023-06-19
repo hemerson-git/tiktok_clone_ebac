@@ -1,58 +1,48 @@
-import { Video } from "./components/Video";
+import { useEffect, useState } from "react";
+import { SongProps, Video } from "./components/Video";
+import db from "./services/firebase";
 import "./styles/app.css";
+import {
+  collection,
+  getDoc,
+  getDocs,
+  DocumentReference,
+} from "firebase/firestore/lite";
 
-const videos = [
-  {
-    id: 1,
-    url: "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",
-    author: {
-      name: "Hemerson",
-      userName: "hemerson-dev",
-    },
-    song: {
-      name: "Just a song",
-      author: "A band",
-    },
-    description: "This is a video",
-    likes: 100,
-    comments: 200,
-    shares: 40,
-  },
-  {
-    id: 2,
-    url: "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",
-    author: {
-      name: "Hemerson",
-      userName: "hemerson-dev",
-    },
-    song: {
-      name: "Just a song",
-      author: "A band",
-    },
-    description: "This is a video",
-    likes: 400,
-    comments: 200,
-    shares: 100,
-  },
-  {
-    id: 3,
-    url: "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",
-    author: {
-      name: "Hemerson",
-      userName: "hemerson-dev",
-    },
-    song: {
-      name: "Just a song",
-      author: "A band",
-    },
-    description: "This is a video",
-    likes: 100,
-    comments: 100,
-    shares: 50,
-  },
-];
+export type VideoProps = {
+  id: number;
+  url: string;
+  author: DocumentReference<unknown>;
+  song: DocumentReference<unknown>;
+  description: string;
+  likes: number;
+  comments: number;
+  shares: number;
+};
 
 function App() {
+  const [videos, setVideos] = useState<VideoProps[]>([]);
+
+  async function getVideos() {
+    const videosCollection = collection(db, "videos");
+    const videosSnapshot = await getDocs(videosCollection);
+    const videoList = videosSnapshot.docs.map((doc) => {
+      const video = doc.data();
+      getDoc(video.author).then((author) => (video.author = author.data()));
+      getDoc(video.song).then((song) => (video.song = song.data()));
+
+      return video as VideoProps;
+    });
+
+    setVideos(videoList);
+  }
+
+  useEffect(() => {
+    getVideos();
+  }, []);
+
+  console.log(videos);
+
   return (
     <main className="app">
       <div className="app__videos">
