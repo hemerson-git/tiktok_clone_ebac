@@ -51,6 +51,12 @@
   -webkit-animation: spin 1.6s linear infinite;
 }
 
+@media only screen and (min-width: 440px) {
+  .videoFooter {
+    padding-bottom: 30px;
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
